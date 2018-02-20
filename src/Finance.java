@@ -36,7 +36,7 @@ public class Finance {
 		contador =0;
 
 		// son los documentos que guardaran la informaición de los HTML 
-		Document[] arregloDocumento= new Document[4];
+		Document[] arregloDocumento= new Document[3];
 
 
 		try {
@@ -45,12 +45,15 @@ public class Finance {
 			// que se pueden obtener (usualemtne 60 es lo máximo que permite)
 			
 			int start= 0;
-			int num = 60;
+			int num = 120;
+			boolean entro = true;
 			for (int i = 0; i<arregloDocumento.length; i++) {
 
-			if(i ==4) {
-				TimeUnit.SECONDS.sleep(10);
+			if (entro){
+				arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE?start=0&num=100").timeout(0).maxBodySize(0).get();
+				entro = false;
 			}
+				
 				arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE/collection/topselling_free?start="+start+"&num="+num).timeout(0).maxBodySize(0).get();
 				start +=60;
 				
