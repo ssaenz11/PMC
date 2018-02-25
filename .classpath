@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry excluding="src/" kind="src" path=""/>
 	<classpathentry kind="lib" path="jsoup/jsoup-1.8.3.jar"/>
+	<classpathentry kind="lib" path="/Users/Santiago/Documents/Finanzas/jsoup/gson-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

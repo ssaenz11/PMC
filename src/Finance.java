@@ -1,6 +1,6 @@
 /**
  * Recuerde que este programa no funciona con el wifi de la universidad de estar conectado por lan para probarlo o intentar con 
- * el internet de más privado como el de una casa
+ * el internet de mï¿½s privado como el de una casa
  */
 
 import java.io.IOException;
@@ -14,6 +14,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import com.google.gson.Gson;
 
 
 
@@ -29,20 +31,20 @@ public class Finance {
 
 		
 
-		//Lista en donde se guardará le información de los apps(véase clase App)
+		//Lista en donde se guardarï¿½ le informaciï¿½n de los apps(vï¿½ase clase App)
 		listaApps = new ArrayList<App>();
 
 		//Contador de las aplicaciones
 		contador =0;
 
-		// son los documentos que guardaran la informaición de los HTML 
+		// son los documentos que guardaran la informaiciï¿½n de los HTML 
 		Document[] arregloDocumento= new Document[3];
 
 
 		try {
-			// los links de los cuales vamos a extraer la información de los Html . Son varios porque google play no permite extarer la información de una sola vez 
-			// la información "start=0&num=60" de la url parmite agrupar las apps , en este caso start implica que se emplieza desde la app 0 y num indica la cantidad de elementos 
-			// que se pueden obtener (usualemtne 60 es lo máximo que permite)
+			// los links de los cuales vamos a extraer la informaciï¿½n de los Html . Son varios porque google play no permite extarer la informaciï¿½n de una sola vez 
+			// la informaciï¿½n "start=0&num=60" de la url parmite agrupar las apps , en este caso start implica que se emplieza desde la app 0 y num indica la cantidad de elementos 
+			// que se pueden obtener (usualemtne 60 es lo mï¿½ximo que permite)
 			
 			int start= 0;
 			int num = 120;
@@ -130,11 +132,16 @@ public class Finance {
 	public void darInfoApp(int i) {
 		System.out.println("--------------------------------------------------------------------------");
 		System.out.println(listaApps.get(i).getId()+ ". "+ listaApps.get(i).getNombre());
-		System.out.println("Número de ratings : "+listaApps.get(i).getNumeroRatings() );
+		System.out.println("Nï¿½mero de ratings : "+listaApps.get(i).getNumeroRatings() );
 		System.out.println("Rating promedio : "+ listaApps.get(i).getRatingPromedio());
 		System.out.println("Descripcion : "+ listaApps.get(i).getDescripcion());
 		System.out.println("Camcios recientes : "+ listaApps.get(i).getCambiosRecientes());
 		System.out.println("--------------------------------------------------------------------------");
+	}
+	
+	public List<App> darLista(){
+		
+		return listaApps;
 	}
 
 
@@ -145,26 +152,30 @@ public class Finance {
 
 		Finance finance = new Finance();
 
-		System.out.println("Qué información desea de la PlayStore , Categoría Finanzas");
-		System.out.println("1. Lista de las aplicaciones con toda su información(escriba 1)");
+//		System.out.println("Quï¿½ informaciï¿½n desea de la PlayStore , Categorï¿½a Finanzas");
+//		System.out.println("1. Lista de las aplicaciones con toda su informaciï¿½n(escriba 1)");
+//
+//
+//		Scanner reader = new Scanner(System.in);
+//		int n = reader.nextInt(); // Scans the next token of the input as an int.
+//		//once finished
+//
+//
+//		if (n == 1) {
+//			finance.darInfoPlayStore();
+//			System.out.println("2. Dar info de una aplicaciï¿½n(escriba el id de la apliciaciï¿½n)");
+//			Scanner reader1 = new Scanner(System.in);
+//			int x = reader1.nextInt(); // Scans the next token of the input as an int.
+//			//once finished
+//			reader.close(); 
+//			finance.darInfoApp(x);
+//
+//		}
 
-
-		Scanner reader = new Scanner(System.in);
-		int n = reader.nextInt(); // Scans the next token of the input as an int.
-		//once finished
-
-
-		if (n == 1) {
-			finance.darInfoPlayStore();
-			System.out.println("2. Dar info de una aplicación(escriba el id de la apliciación)");
-			Scanner reader1 = new Scanner(System.in);
-			int x = reader1.nextInt(); // Scans the next token of the input as an int.
-			//once finished
-			reader.close(); 
-			finance.darInfoApp(x);
-
-		}
-
+		
+		Gson gson = new Gson();
+        String jsonNames = gson.toJson(finance.darLista());
+        System.out.println("jsonNames = " + jsonNames);
 
 
 
