@@ -19,6 +19,8 @@ import com.google.gson.Gson;
 
 
 
+
+
 public class Finance {
 
 	HashSet<String> hrefs;
