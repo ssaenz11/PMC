@@ -1,8 +1,8 @@
 
 public class App {
 	
-	private String apk;
 	
+	private String apk;
 	private int id;
 	
 	private String nombre;
@@ -25,6 +25,7 @@ public class App {
 		descripcion = descripcion2;
 		CambiosRecientes = cambiosRecientes2; 
 		apk = apk2;
+		
 		
 		
 	}

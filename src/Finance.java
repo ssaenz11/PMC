@@ -1,25 +1,13 @@
-/**
- * Recuerde que este programa no funciona con el wifi de la universidad de estar conectado por lan para probarlo o intentar con 
- * el internet de mï¿½s privado como el de una casa
- */
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import com.google.gson.Gson;
-
-
-
-
 
 public class Finance {
 
@@ -33,37 +21,36 @@ public class Finance {
 
 		
 
-		//Lista en donde se guardarï¿½ le informaciï¿½n de los apps(vï¿½ase clase App)
+		//Lista en donde se guardará le información de los apps(véase clase App)
 		listaApps = new ArrayList<App>();
 
 		//Contador de las aplicaciones
 		contador =0;
 
-		// son los documentos que guardaran la informaiciï¿½n de los HTML 
+		// son los documentos que guardaran la informaición de los HTML 
 		Document[] arregloDocumento= new Document[3];
 
 
 		try {
-			// los links de los cuales vamos a extraer la informaciï¿½n de los Html . Son varios porque google play no permite extarer la informaciï¿½n de una sola vez 
-			// la informaciï¿½n "start=0&num=60" de la url parmite agrupar las apps , en este caso start implica que se emplieza desde la app 0 y num indica la cantidad de elementos 
-			// que se pueden obtener (usualemtne 60 es lo mï¿½ximo que permite)
+			// los links de los cuales vamos a extraer la información de los Html . Son varios porque google play no permite extarer la información de una sola vez 
+			// la información "start=0&num=60" de la url parmite agrupar las apps , en este caso start implica que se emplieza desde la app 0 y num indica la cantidad de elementos 
+			// que se pueden obtener (usualemtne 60 es lo máximo que permite)
 			
 			int start= 0;
 			int num = 120;
-			boolean entro = true;
-			for (int i = 0; i<arregloDocumento.length; i++) {
+			for (int i = 0; i<arregloDocumento.length-1; i++) {
 
-			if (entro){
-				arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE?start=0&num=100").timeout(0).maxBodySize(0).get();
-				entro = false;
-			}
-				
+			
 				arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE/collection/topselling_free?start="+start+"&num="+num).timeout(0).maxBodySize(0).get();
-				start +=60;
+				start =120;
 				
-					
 				
 			}
+			
+			
+			arregloDocumento[2] =(Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE?start=0&num=100").timeout(0).maxBodySize(0).get();
+			
+			
 		
 
 		} catch (IOException e) {
@@ -86,7 +73,7 @@ public class Finance {
 		Elements anchors = doc.getElementsByClass("card-click-target");
 		for(Element element: anchors) {
 
-			hrefs.add("https://play.google.com/"+ element.attr("href").toString());
+			hrefs.add("https://play.google.com/" +element.attr("href").toString());
 		}
 
 		String nombre = null;
@@ -94,22 +81,24 @@ public class Finance {
 		String ratingPromedio = null;
 		String cambiosRecientes = null;
 		String descripcion = null;
-		String apk = null;
+		String apk= null;
 
 
 		for(String url: hrefs) {
 			try {
+						
 
 				detailDoc = Jsoup.connect(url).timeout(0).get();
-				numeroRatings= detailDoc.select("[class=\"rating-count\"]").text().replaceAll(",", "");
+				
+				numeroRatings= "0";
 				nombre= detailDoc.select("[class=\"id-app-title\"]").text();
 				double numeroRatings2 =Double.parseDouble(numeroRatings);
-				ratingPromedio= detailDoc.select("[class=\"score\"]").text().replaceAll(",", ".");
+				ratingPromedio= "0";
 				double ratingPromedio2 = Double.parseDouble(ratingPromedio);
 				descripcion= detailDoc.select("[class=\"description\"]").text();
 				cambiosRecientes= detailDoc.select("[class=\"recent-change\"]").text();
-				apk= detailDoc.select("[class=\"data-docid\"]").text();
-				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes,apk);
+				apk= detailDoc.select("[data-docid]").attr("data-docid");
+				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes, apk);
 				contador++;
 
 				listaApps.add(app);
@@ -128,25 +117,20 @@ public class Finance {
 
 		for(int i = 0; i<listaApps.size();i++) {
 
-			System.out.println(listaApps.get(i).getId()+ ". "+ listaApps.get(i).getNombre());
+			System.out.println(listaApps.get(i).getId()+ ". " +listaApps.get(i).getNombre());
 			System.out.println("--------------------------------------------------------------------------");
 
 		}
 	}
 	public void darInfoApp(int i) {
 		System.out.println("--------------------------------------------------------------------------");
-		System.out.println(listaApps.get(i).getId()+ ". "+ listaApps.get(i).getNombre());
-		System.out.println("Nï¿½mero de ratings : "+listaApps.get(i).getNumeroRatings() );
-		System.out.println("Rating promedio : "+ listaApps.get(i).getRatingPromedio());
+		System.out.println(listaApps.get(i).getId()+ ". " +listaApps.get(i).getNombre());
+		System.out.println("Número de ratings : "+listaApps.get(i).getNumeroRatings() );
+		System.out.println("Rating promedio : " +listaApps.get(i).getRatingPromedio());
 		System.out.println("Descripcion : "+ listaApps.get(i).getDescripcion());
 		System.out.println("Camcios recientes : "+ listaApps.get(i).getCambiosRecientes());
-		System.out.println("Apk : "+ listaApps.get(i).getApk());
+		System.out.println("APK: "+ listaApps.get(i).getApk());
 		System.out.println("--------------------------------------------------------------------------");
-	}
-	
-	public List<App> darLista(){
-		
-		return listaApps;
 	}
 
 
@@ -157,8 +141,8 @@ public class Finance {
 
 		Finance finance = new Finance();
 
-		System.out.println("Quï¿½ informaciï¿½n desea de la PlayStore , Categorï¿½a Finanzas");
-		System.out.println("1. Lista de las aplicaciones con toda su informaciï¿½n(escriba 1)");
+		System.out.println("Qué información desea de la PlayStore , Categoría Finanzas");
+		System.out.println("1. Lista de las aplicaciones con toda su información(escriba 1)");
 
 
 		Scanner reader = new Scanner(System.in);
@@ -168,7 +152,7 @@ public class Finance {
 
 		if (n == 1) {
 			finance.darInfoPlayStore();
-			System.out.println("2. Dar info de una aplicaciï¿½n(escriba el id de la apliciaciï¿½n)");
+			System.out.println("2. Dar info de una aplicación(escriba el id de la apliciación)");
 			Scanner reader1 = new Scanner(System.in);
 			int x = reader1.nextInt(); // Scans the next token of the input as an int.
 			//once finished
@@ -177,10 +161,6 @@ public class Finance {
 
 		}
 
-		
-//		Gson gson = new Gson();
-//        String jsonNames = gson.toJson(finance.darLista());
-//        System.out.println("jsonNames = " + jsonNames);
 
 
 
