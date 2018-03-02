@@ -1,6 +1,7 @@
 
 public class App {
 	
+	private String apk;
 	
 	private int id;
 	
@@ -15,7 +16,7 @@ public class App {
 	private String CambiosRecientes;
 	
 	public App(int id2, String nombre2, double numeroRatings2, double ratingPromedio2
-			, String descripcion2, String cambiosRecientes2) {
+			, String descripcion2, String cambiosRecientes2, String apk2) {
 		
 		id = id2;
 		nombre = nombre2;
@@ -23,6 +24,7 @@ public class App {
 		ratingPromedio = ratingPromedio2;
 		descripcion = descripcion2;
 		CambiosRecientes = cambiosRecientes2; 
+		apk = apk2;
 		
 		
 	}
@@ -73,6 +75,14 @@ public class App {
 
 	public void setCambiosRecientes(String cambiosRecientes) {
 		CambiosRecientes = cambiosRecientes;
+	}
+
+	public String getApk() {
+		return apk;
+	}
+
+	public void setApk(String apk) {
+		this.apk = apk;
 	}
 	
 	

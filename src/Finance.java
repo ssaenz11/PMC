@@ -94,6 +94,7 @@ public class Finance {
 		String ratingPromedio = null;
 		String cambiosRecientes = null;
 		String descripcion = null;
+		String apk = null;
 
 
 		for(String url: hrefs) {
@@ -107,7 +108,8 @@ public class Finance {
 				double ratingPromedio2 = Double.parseDouble(ratingPromedio);
 				descripcion= detailDoc.select("[class=\"description\"]").text();
 				cambiosRecientes= detailDoc.select("[class=\"recent-change\"]").text();
-				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes);
+				apk= detailDoc.select("[class=\"data-docid\"]").text();
+				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes,apk);
 				contador++;
 
 				listaApps.add(app);
@@ -138,6 +140,7 @@ public class Finance {
 		System.out.println("Rating promedio : "+ listaApps.get(i).getRatingPromedio());
 		System.out.println("Descripcion : "+ listaApps.get(i).getDescripcion());
 		System.out.println("Camcios recientes : "+ listaApps.get(i).getCambiosRecientes());
+		System.out.println("Apk : "+ listaApps.get(i).getApk());
 		System.out.println("--------------------------------------------------------------------------");
 	}
 	
@@ -154,30 +157,30 @@ public class Finance {
 
 		Finance finance = new Finance();
 
-//		System.out.println("Qu� informaci�n desea de la PlayStore , Categor�a Finanzas");
-//		System.out.println("1. Lista de las aplicaciones con toda su informaci�n(escriba 1)");
-//
-//
-//		Scanner reader = new Scanner(System.in);
-//		int n = reader.nextInt(); // Scans the next token of the input as an int.
-//		//once finished
-//
-//
-//		if (n == 1) {
-//			finance.darInfoPlayStore();
-//			System.out.println("2. Dar info de una aplicaci�n(escriba el id de la apliciaci�n)");
-//			Scanner reader1 = new Scanner(System.in);
-//			int x = reader1.nextInt(); // Scans the next token of the input as an int.
-//			//once finished
-//			reader.close(); 
-//			finance.darInfoApp(x);
-//
-//		}
+		System.out.println("Qu� informaci�n desea de la PlayStore , Categor�a Finanzas");
+		System.out.println("1. Lista de las aplicaciones con toda su informaci�n(escriba 1)");
+
+
+		Scanner reader = new Scanner(System.in);
+		int n = reader.nextInt(); // Scans the next token of the input as an int.
+		//once finished
+
+
+		if (n == 1) {
+			finance.darInfoPlayStore();
+			System.out.println("2. Dar info de una aplicaci�n(escriba el id de la apliciaci�n)");
+			Scanner reader1 = new Scanner(System.in);
+			int x = reader1.nextInt(); // Scans the next token of the input as an int.
+			//once finished
+			reader.close(); 
+			finance.darInfoApp(x);
+
+		}
 
 		
-		Gson gson = new Gson();
-        String jsonNames = gson.toJson(finance.darLista());
-        System.out.println("jsonNames = " + jsonNames);
+//		Gson gson = new Gson();
+//        String jsonNames = gson.toJson(finance.darLista());
+//        System.out.println("jsonNames = " + jsonNames);
 
 
 
