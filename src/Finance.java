@@ -19,39 +19,41 @@ public class Finance {
 
 	public Finance() throws InterruptedException {
 
-		
 
-		//Lista en donde se guardará le información de los apps(véase clase App)
+
+		//Lista en donde se guardarï¿½ le informaciï¿½n de los apps(vï¿½ase clase App)
 		listaApps = new ArrayList<App>();
 
 		//Contador de las aplicaciones
 		contador =0;
 
-		// son los documentos que guardaran la informaición de los HTML 
+		// son los documentos que guardaran la informaiciï¿½n de los HTML 
 		Document[] arregloDocumento= new Document[3];
 
 
 		try {
-			// los links de los cuales vamos a extraer la información de los Html . Son varios porque google play no permite extarer la información de una sola vez 
-			// la información "start=0&num=60" de la url parmite agrupar las apps , en este caso start implica que se emplieza desde la app 0 y num indica la cantidad de elementos 
-			// que se pueden obtener (usualemtne 60 es lo máximo que permite)
-			
-			int start= 0;
-			int num = 120;
-			for (int i = 0; i<arregloDocumento.length-1; i++) {
+			// la informaci?n "start=0&num=60" de la url parmite agrupar las apps , en este caso start implica que se emplieza desde la app 0 y num indica la cantidad de elementos 
+			// que se pueden obtener (usualemtne 60 es lo m?ximo que permite)
 
-			
+
+			int start= 0;
+
+			int num = 120;
+
+			boolean entro = true;
+
+			for (int i = 0; i<arregloDocumento.length; i++) 
+			{
+				if (entro)
+				{
+					arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE?start=0&num=100").timeout(0).maxBodySize(0).get();
+					entro = false;
+				}
 				arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE/collection/topselling_free?start="+start+"&num="+num).timeout(0).maxBodySize(0).get();
-				start =120;
-				
-				
+				start +=60;
 			}
-			
-			
-			arregloDocumento[2] =(Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE?start=0&num=100").timeout(0).maxBodySize(0).get();
-			
-			
-		
+
+
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -86,10 +88,10 @@ public class Finance {
 
 		for(String url: hrefs) {
 			try {
-						
+
 
 				detailDoc = Jsoup.connect(url).timeout(0).get();
-				
+
 				numeroRatings= "0";
 				nombre= detailDoc.select("[class=\"id-app-title\"]").text();
 				double numeroRatings2 =Double.parseDouble(numeroRatings);
@@ -125,7 +127,7 @@ public class Finance {
 	public void darInfoApp(int i) {
 		System.out.println("--------------------------------------------------------------------------");
 		System.out.println(listaApps.get(i).getId()+ ". " +listaApps.get(i).getNombre());
-		System.out.println("Número de ratings : "+listaApps.get(i).getNumeroRatings() );
+		System.out.println("Nï¿½mero de ratings : "+listaApps.get(i).getNumeroRatings() );
 		System.out.println("Rating promedio : " +listaApps.get(i).getRatingPromedio());
 		System.out.println("Descripcion : "+ listaApps.get(i).getDescripcion());
 		System.out.println("Camcios recientes : "+ listaApps.get(i).getCambiosRecientes());
@@ -141,8 +143,8 @@ public class Finance {
 
 		Finance finance = new Finance();
 
-		System.out.println("Qué información desea de la PlayStore , Categoría Finanzas");
-		System.out.println("1. Lista de las aplicaciones con toda su información(escriba 1)");
+		System.out.println("Quï¿½ informaciï¿½n desea de la PlayStore , Categorï¿½a Finanzas");
+		System.out.println("1. Lista de las aplicaciones con toda su informaciï¿½n(escriba 1)");
 
 
 		Scanner reader = new Scanner(System.in);
@@ -152,7 +154,7 @@ public class Finance {
 
 		if (n == 1) {
 			finance.darInfoPlayStore();
-			System.out.println("2. Dar info de una aplicación(escriba el id de la apliciación)");
+			System.out.println("2. Dar info de una aplicaciï¿½n(escriba el id de la apliciaciï¿½n)");
 			Scanner reader1 = new Scanner(System.in);
 			int x = reader1.nextInt(); // Scans the next token of the input as an int.
 			//once finished
