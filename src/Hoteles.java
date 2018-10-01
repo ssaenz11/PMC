@@ -1,91 +1,117 @@
+import java.util.ArrayList;
 
-public class App {
+public class Hoteles {
+
+	private String categoria;
 	
-	
-	private String apk;
-	private int id;
-	
-	private String nombre;
-	
-	private double numeroRatings;
-	
-	private double ratingPromedio;
-	
-	private String descripcion;
-	
-	private String CambiosRecientes;
-	
-	public App(int id2, String nombre2, double numeroRatings2, double ratingPromedio2
-			, String descripcion2, String cambiosRecientes2, String apk2) {
+	private String nombreHotel;
+
+	private String ubicacion;
+
+	private String numeroRatings;
+
+	private String estrellas;
+
+	private String descripciones;
+
+
+
+
+
+	public Hoteles(String cCategoria ,String nNombreHotel,String uUbicacion, String numeroRatings2, String eEstrellas
+			, String descripcion2) 
+	{
+
+		setCategoria(cCategoria);
+		setNombreHotel(nNombreHotel);
+		setUbicacion(uUbicacion);
+		setNumeroRatings(numeroRatings2);
+		setEstrellas(eEstrellas);
+		setDescripciones(descripcion2);
 		
-		id = id2;
-		nombre = nombre2;
-		numeroRatings = numeroRatings2;
-		ratingPromedio = ratingPromedio2;
-		descripcion = descripcion2;
-		CambiosRecientes = cambiosRecientes2; 
-		apk = apk2;
-		
-		
-		
+
+
+
+
 	}
 
-	public int getId() {
-		return id;
+
+
+	public String getNombreHotel() {
+		return nombreHotel;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+
+
+	public void setNombreHotel(String nombreHotel) {
+		this.nombreHotel = nombreHotel;
 	}
 
-	public String getNombre() {
-		return nombre;
+
+
+	public String getUbicacion() {
+		return ubicacion;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
+
+
+	public void setUbicacion(String ubicacion) {
+		this.ubicacion = ubicacion;
 	}
 
-	public double getNumeroRatings() {
+
+
+	public String getNumeroRatings() {
 		return numeroRatings;
 	}
 
-	public void setNumeroRatings(double numeroRatings) {
+
+
+	public void setNumeroRatings(String numeroRatings) {
 		this.numeroRatings = numeroRatings;
 	}
 
-	public double getRatingPromedio() {
-		return ratingPromedio;
+
+
+	public String getEstrellas() {
+		return estrellas;
 	}
 
-	public void setRatingPromedio(double ratingPromedio) {
-		this.ratingPromedio = ratingPromedio;
+
+
+	public void setEstrellas(String estrellas) {
+		this.estrellas = estrellas;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+
+
+	public String getDescripciones() {
+		return descripciones;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+
+
+	public void setDescripciones(String descripcion2) {
+		this.descripciones = descripcion2;
 	}
 
-	public String getCambiosRecientes() {
-		return CambiosRecientes;
+
+
+
+
+
+	public String getCategoria() {
+		return categoria;
 	}
 
-	public void setCambiosRecientes(String cambiosRecientes) {
-		CambiosRecientes = cambiosRecientes;
+
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 
-	public String getApk() {
-		return apk;
-	}
 
-	public void setApk(String apk) {
-		this.apk = apk;
-	}
-	
-	
+
+
 
 }

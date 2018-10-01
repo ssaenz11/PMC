@@ -1,4 +1,11 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,26 +16,29 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class Finance {
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+public class Viajes {
 
 	HashSet<String> hrefs;
 
 	private int contador;
 
-	private List<App> listaApps;
+	private  List<Hoteles> listaHoteles;
 
-	public Finance() throws InterruptedException {
+	public Viajes() throws InterruptedException {
 
 
 
 		//Lista en donde se guardar� le informaci�n de los apps(v�ase clase App)
-		listaApps = new ArrayList<App>();
+		listaHoteles = new ArrayList<Hoteles>();
 
 		//Contador de las aplicaciones
 		contador =0;
 
 		// son los documentos que guardaran la informaici�n de los HTML 
-		Document[] arregloDocumento= new Document[3];
+		Document arregloDocumento = null;
 
 
 		try {
@@ -36,74 +46,98 @@ public class Finance {
 			// que se pueden obtener (usualemtne 60 es lo m?ximo que permite)
 
 
-			int start= 0;
-
-			int num = 120;
-
-			boolean entro = true;
-
-			for (int i = 0; i<arregloDocumento.length; i++) 
-			{
-				if (entro)
-				{
-					arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE?start=0&num=100").timeout(0).maxBodySize(0).get();
-					entro = false;
-				}
-				arregloDocumento[i] =  (Document) Jsoup.connect ("https://play.google.com/store/apps/category/FINANCE/collection/topselling_free?start="+start+"&num="+num).timeout(0).maxBodySize(0).get();
-				start +=60;
-			}
-
-
+			arregloDocumento =  (Document) Jsoup.connect ("https://www.tripadvisor.co/Hotels").timeout(0).maxBodySize(0).get();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (int i = 0; i<arregloDocumento.length; i++) {
 
-			decodificarYGuardar(arregloDocumento[i]);
-		}
+
+		decodificarYGuardar(arregloDocumento);
 
 	}
 
+
+	//Método que decodifica la información del documento HTML
 	public void decodificarYGuardar(Document doc) {
 
 		hrefs = new HashSet<String>();
 
 		Document detailDoc = null;
 
-		Elements anchors = doc.getElementsByClass("card-click-target");
+		Elements anchors = doc.getElementsByClass("item");
+
 		for(Element element: anchors) {
 
-			hrefs.add("https://play.google.com/" +element.attr("href").toString());
+
+			hrefs.add("https://www.tripadvisor.co/Hotels/" +element.attr("href").toString());
 		}
 
-		String nombre = null;
-		String numeroRatings = null;
-		String ratingPromedio = null;
-		String cambiosRecientes = null;
-		String descripcion = null;
-		String apk= null;
 
 
 		for(String url: hrefs) {
 			try {
+				System.out.println(url);
+
+				HashSet<String> hash2 = new HashSet<String>();
+
+
 
 
 				detailDoc = Jsoup.connect(url).timeout(0).get();
 
-				numeroRatings= "0";
-				nombre= detailDoc.select("[class=\"id-app-title\"]").text();
-				double numeroRatings2 =Double.parseDouble(numeroRatings);
-				ratingPromedio= "0";
-				double ratingPromedio2 = Double.parseDouble(ratingPromedio);
-				descripcion= detailDoc.select("[class=\"description\"]").text();
-				cambiosRecientes= detailDoc.select("[class=\"recent-change\"]").text();
-				apk= detailDoc.select("[data-docid]").attr("data-docid");
-				App app = new App(contador, nombre, numeroRatings2, ratingPromedio2, descripcion, cambiosRecientes, apk);
-				contador++;
+				Document detailDoc2 = null;
 
-				listaApps.add(app);
+				Elements anchor1 = detailDoc.getElementsByClass("review_count");
+
+				String nombre = null;
+				String ubicacion = null;
+				String numeroRatings = null; 
+				String estrellas = null;
+				String comentarios = null;
+				String direccion = null;
+
+				for(Element element: anchor1){
+
+					hash2.add("https://www.tripadvisor.co" +element.attr("href").toString());
+
+
+
+					for(String url1:hash2){
+
+						System.out.println(url1);
+
+						detailDoc2 = Jsoup.connect(url1).timeout(0).get();
+
+						nombre = detailDoc2.getElementsByClass("subtitle__subtitle--eEauT").text();
+
+						ubicacion = detailDoc2.getElementsByClass("locality").text();
+
+						numeroRatings = detailDoc2.getElementsByClass("reviewCount").text();
+
+						estrellas = detailDoc2.getElementsByClass("overallRating").text();
+
+						comentarios= detailDoc2.getElementsByClass("partial_entry").text();
+
+						direccion = detailDoc2.getElementsByClass("street-address").text();
+
+						Hoteles hot = new Hoteles(ubicacion, nombre, direccion, numeroRatings, estrellas, comentarios);
+
+						listaHoteles.add(hot);
+						System.out.println("i");
+						System.out.println(nombre);
+						System.out.println(ubicacion);
+						System.out.println(numeroRatings);
+						System.out.println(estrellas);
+						System.out.println(comentarios);
+						System.out.println(direccion);
+
+
+					}
+				}
+
+
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -115,60 +149,39 @@ public class Finance {
 
 	}
 
-	public void darInfoPlayStore() {
 
-		for(int i = 0; i<listaApps.size();i++) {
 
-			System.out.println(listaApps.get(i).getId()+ ". " +listaApps.get(i).getNombre());
-			System.out.println("--------------------------------------------------------------------------");
 
-		}
-	}
-	public void darInfoApp(int i) {
-		System.out.println("--------------------------------------------------------------------------");
-		System.out.println(listaApps.get(i).getId()+ ". " +listaApps.get(i).getNombre());
-		System.out.println("N�mero de ratings : "+listaApps.get(i).getNumeroRatings() );
-		System.out.println("Rating promedio : " +listaApps.get(i).getRatingPromedio());
-		System.out.println("Descripcion : "+ listaApps.get(i).getDescripcion());
-		System.out.println("Camcios recientes : "+ listaApps.get(i).getCambiosRecientes());
-		System.out.println("APK: "+ listaApps.get(i).getApk());
-		System.out.println("--------------------------------------------------------------------------");
+
+
+
+	public List<Hoteles> getListaApps() {
+		return listaHoteles;
 	}
 
+	public void setListaApps(List<Hoteles> listaApps) {
+		this.listaHoteles = listaApps;
+	}
 
+	public static void main (String[] args) throws InterruptedException, IOException {
 
+		Viajes vi = new Viajes();
 
+		Gson gson = new Gson();
+		String txt = gson.toJson(vi.getListaApps());
 
-	public static void main (String[] args) throws InterruptedException {
-
-		Finance finance = new Finance();
-
-		System.out.println("Qu� informaci�n desea de la PlayStore , Categor�a Finanzas");
-		System.out.println("1. Lista de las aplicaciones con toda su informaci�n(escriba 1)");
-
-
-		Scanner reader = new Scanner(System.in);
-		int n = reader.nextInt(); // Scans the next token of the input as an int.
-		//once finished
-
-
-		if (n == 1) {
-			finance.darInfoPlayStore();
-			System.out.println("2. Dar info de una aplicaci�n(escriba el id de la apliciaci�n)");
-			Scanner reader1 = new Scanner(System.in);
-			int x = reader1.nextInt(); // Scans the next token of the input as an int.
-			//once finished
-			reader.close(); 
-			finance.darInfoApp(x);
-
+		BufferedWriter output = null;
+		try {
+			File file = new File("example.txt");
+			output = new BufferedWriter(new FileWriter(file));
+			output.write(txt);
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		} finally {
+			if ( output != null ) {
+				output.close();
+			}
 		}
-
-
-
-
-
-
-
 
 	}
 
