@@ -1,25 +1,28 @@
 package Test;
+
 import static java.lang.Math.random;
+
+import java.util.Arrays;
+
 import static java.lang.Math.exp;
 
-public class Red {
+public class Network {
 	private final int NLayers;
+	private final int[] layers;
 	private final int maxLayer;
 	private final double[][] biases;
 	private final double[][][] weigth;
 
-	public Red(int nLayers, double[][] biases, double[][][] weigth) {
-		NLayers = nLayers;
+	public Network(int[] layers, double[][] biases, double[][][] weigth) {
+		NLayers = layers.length;
+		this.layers = layers;
+		this.maxLayer = Arrays.stream(layers).max().getAsInt();
 		this.biases = biases;
 		this.weigth = weigth;
-
-		int maxLayer = 0;
-		for (int i = 0; i < biases.length; i++)
-			maxLayer = Integer.max(maxLayer, biases[i].length);
-		this.maxLayer = maxLayer;
 	}
 
-	public Red(int... layers) {
+	public Network(int... layers) {
+		this.layers = layers;
 		NLayers = layers.length;
 		biases = new double[NLayers - 1][];
 		weigth = new double[NLayers - 1][][];
@@ -42,7 +45,7 @@ public class Red {
 		this.maxLayer = maxLayer;
 	}
 
-	public double[] calcular(double[] array) {
+	public double[] calculate(double[] array) {
 		double cum;
 		double[] w, prev = new double[maxLayer];
 		double[] act = new double[maxLayer];
@@ -65,13 +68,15 @@ public class Red {
 		return ans;
 	}
 
-	public static void main(String[] args) {
-		long ini =0; 
-		ini = System.currentTimeMillis();
-		Red r = new Red(10, 1000, 5000, 1000, 1000);
-		System.out.println(System.currentTimeMillis() - ini);
-		ini = System.currentTimeMillis();
-		r.calcular(new double[] {-1,2,3,4,5,-6,7,-8,9});
-		System.out.println(System.currentTimeMillis() - ini);
+	public int[] getLayers() {
+		return layers;
+	}
+
+	public double[][] getBiases() {
+		return biases;
+	}
+
+	public double[][][] getWeigth() {
+		return weigth;
 	}
 }
