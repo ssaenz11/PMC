@@ -1,10 +1,8 @@
 package Test;
 
 import static java.lang.Math.random;
-
-import java.util.Arrays;
-
 import static java.lang.Math.exp;
+import java.util.Arrays;
 
 public class Network {
 	private final int NLayers;
